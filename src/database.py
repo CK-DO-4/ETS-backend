@@ -7,12 +7,16 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase
 
+from src.config import PostgresSettings
+
 
 class Base(DeclarativeBase):
     pass
 
 
-engine = create_async_engine("...", echo=False)
+cfg = PostgresSettings()
+
+engine = create_async_engine(cfg.get_db_url(), echo=False, pool_pre_ping=True)
 
 async_session_maker = async_sessionmaker(
     bind=engine,
